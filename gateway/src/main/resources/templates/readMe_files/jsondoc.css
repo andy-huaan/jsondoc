@@ -1,0 +1,51 @@
+html {
+	text-align: justify; color: rgb(64, 64, 64); font-size: 12px; background-image: url("../img/classy_fabric.png"); background-color: rgb(238, 238, 238);
+}
+body {
+	text-align: justify; color: rgb(64, 64, 64); font-size: 12px; background-image: url("../img/classy_fabric.png"); background-color: rgb(238, 238, 238);
+}
+body {
+	padding-top: 20px;
+}
+h1 {
+	color: rgb(64, 64, 64); font-family: "Oswald", sans-serif; font-weight: bold; margin-top: 20px;
+}
+h2 {
+	color: rgb(64, 64, 64); font-family: "Oswald", sans-serif; font-weight: bold; margin-top: 20px;
+}
+h3 {
+	color: rgb(64, 64, 64); font-family: "Oswald", sans-serif; font-weight: bold; margin-top: 20px;
+}
+h4 {
+	color: rgb(64, 64, 64); font-family: "Oswald", sans-serif; font-weight: bold; margin-top: 20px;
+}
+h1 {
+	font-size: 70px;
+}
+h3 {
+	margin-top: 0px;
+}
+h4 {
+	margin-top: 0px;
+}
+h3.spaced {
+	margin-top: 40px;
+}
+h4.spaced {
+	margin-top: 40px;
+}
+pre {
+	font-size: 11px;
+}
+.container {
+	background-color: rgb(255, 255, 255);
+}
+hr.main {
+	margin-top: 0px; border-bottom-color: rgb(238, 238, 238); border-bottom-width: 7px; border-bottom-style: solid;
+}
+hr.slave {
+	margin-top: 10px; margin-bottom: 10px; border-bottom-color: rgb(238, 238, 238); border-bottom-width: 2px; border-bottom-style: solid;
+}
+p.center {
+	text-align: center;
+}

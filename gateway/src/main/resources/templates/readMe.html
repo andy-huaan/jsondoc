@@ -1,0 +1,137 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0042)http://jsondoc.org/how-to-spring-boot.html -->
+<!DOCTYPE html><HTML lang="en"><HEAD>
+<META charset="utf-8">
+<META name="google-site-verification" content="Cr6TNcmQ5rBt04jGxaxPIM3zw29qOerhsJjFjXZDk4k">
+<META name="viewport" content="width=device-width, initial-scale=1.0">
+<META name="description" content="Easily generate documentation for your RESTful API and quick test API methods">
+<META name="keywords" content="json documentation, restful documentation, api documentation, api doc, json doc, restful doc, generate documentation json, rest documentation, rest doc, jsondoc, test api, test api methods, test restful api, test rest api, json documentation spring mvc">
+<META name="author" content="Fabio Maffioletti"><TITLE>JSONDoc | How to - Spring 
+boot</TITLE><LINK rel="icon" type="image/x-icon" href="img/favicon.ico"><LINK 
+rel="stylesheet" href="readMe_files/bootstrap.min.css"><LINK rel="stylesheet" 
+type="text/css" href="readMe_files/css.css"><LINK rel="stylesheet" href="readMe_files/font-awesome.css"><LINK 
+rel="stylesheet" href="readMe_files/syntax.css"><LINK rel="stylesheet" href="readMe_files/jsondoc.css">
+<SCRIPT type="text/javascript" src="readMe_files/jquery-2.0.3.min.js"></SCRIPT>
+
+<SCRIPT type="text/javascript" src="readMe_files/bootstrap.min.js"></SCRIPT>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries --><!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+<SCRIPT type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4918972-5']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </SCRIPT>
+
+<META name="GENERATOR" content="MSHTML 9.00.8112.16526"></HEAD>
+<BODY>
+<DIV class="container">
+<DIV class="row">
+<DIV class="col-md-9">
+<H1>JSONDoc <SMALL>
+<P style="font-size: 18px;">easily generate docs and playground for your RESTful 
+API</P></SMALL></H1></DIV>
+<DIV class="col-md-3">
+<H2>Contacts</H2>
+<P><I class="fa fa-envelope"></I><A href="mailto:jsondoc@gmail.com" target="blank">Email</A> 
+<I class="fa fa-globe"></I> <A href="http://stackoverflow.com/search?q=jsondoc" 
+target="blank">StackOverflow</A></P>
+<DIV class="row">
+<DIV class="col-md-5">
+<SCRIPT id="fb2h13h">(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=fabiomaffioletti&button=compact&url=http%3A%2F%2Fjsondoc.org&title=JSONDoc&category=software';f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('fb2h13h');
+              </SCRIPT>
+</DIV>
+<DIV class="col-md-7">
+<FORM method="post" action="https://www.paypal.com/cgi-bin/webscr" 
+target="_top"><INPUT name="cmd" value="_s-xclick" type="hidden"><INPUT name="encrypted" 
+value="-----BEGIN PKCS7-----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-----END PKCS7-----&#10;                " 
+type="hidden"><INPUT border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" 
+src="readMe_files/btn_donate_SM.gif" type="image"><IMG border="0" alt="" src="readMe_files/pixel.gif" 
+width="1" height="1"></FORM></DIV></DIV></DIV></DIV>
+<HR class="main">
+
+<DIV class="row">
+
+<DIV class="col-md-9">
+<H3>How to: with Spring Boot</H3>
+<P>With the <CODE>spring-boot-starter-jsondoc</CODE> integrating JSONDoc with 
+Spring Boot application is really simple. Here are the steps:</P>
+<H4>Declare the dependency to spring-boot-starter-jsondoc:</H4>
+<DIV class="highlight"><PRE><CODE class="language-xml" data-lang="xml"><SPAN class="nt">&lt;dependency&gt;</SPAN>
+        <SPAN class="nt">&lt;groupId&gt;</SPAN>org.jsondoc<SPAN class="nt">&lt;/groupId&gt;</SPAN>
+        <SPAN class="nt">&lt;artifactId&gt;</SPAN>spring-boot-starter-jsondoc<SPAN class="nt">&lt;/artifactId&gt;</SPAN>
+        <SPAN class="nt">&lt;version&gt;</SPAN>1.2.10<SPAN class="nt">&lt;/version&gt;</SPAN>
+<SPAN class="nt">&lt;/dependency&gt;</SPAN></CODE></PRE></DIV>
+<H4>Configure JSONDoc in application.properties file</H4>
+<DIV class="highlight"><PRE><CODE class="language-properties" data-lang="properties"><SPAN class="c"># mandatory configuration</SPAN>
+<SPAN class="na">jsondoc.version</SPAN><SPAN class="o">=</SPAN><SPAN class="s">1.0</SPAN>
+<SPAN class="na">jsondoc.basePath</SPAN><SPAN class="o">=</SPAN><SPAN class="s">http://localhost:8080</SPAN>
+<SPAN class="na">jsondoc.packages[0]</SPAN><SPAN class="o">=</SPAN><SPAN class="s">com.example.controller</SPAN>
+<SPAN class="na">jsondoc.packages[1]</SPAN><SPAN class="o">=</SPAN><SPAN class="s">com.example.model</SPAN>
+<SPAN class="c"># optional configuration</SPAN>
+<SPAN class="na">jsondoc.playgroundEnabled</SPAN><SPAN class="o">=</SPAN><SPAN class="s">true</SPAN>
+<SPAN class="na">jsondoc.displayMethodAs</SPAN><SPAN class="o">=</SPAN><SPAN class="s">URI</SPAN></CODE></PRE></DIV>
+<DIV class="alert alert-info">
+<P>See <A href="http://jsondoc.org/configuration.html">Configuration</A> for 
+more information about JSONDoc configuration properties.</P></DIV>
+<H4>Enable JSONDoc on you configuration class</H4>
+<DIV class="highlight"><PRE><CODE class="language-java" data-lang="java"><SPAN class="nd">@SpringBootApplication</SPAN>
+<SPAN class="nd">@EnableJSONDoc</SPAN>
+<SPAN class="kd">public</SPAN> <SPAN class="kd">class</SPAN> <SPAN class="nc">MyWebapp</SPAN> <SPAN class="o">{</SPAN>
+	<SPAN class="kd">public</SPAN> <SPAN class="kd">static</SPAN> <SPAN class="kt">void</SPAN> <SPAN class="nf">main</SPAN><SPAN class="o">(</SPAN><SPAN class="n">String</SPAN><SPAN class="o">[]</SPAN> <SPAN class="n">args</SPAN><SPAN class="o">)</SPAN> <SPAN class="o">{</SPAN>
+		<SPAN class="n">SpringApplication</SPAN><SPAN class="o">.</SPAN><SPAN class="na">run</SPAN><SPAN class="o">(</SPAN><SPAN class="n">MyWebapp</SPAN><SPAN class="o">.</SPAN><SPAN class="na">class</SPAN><SPAN class="o">,</SPAN> <SPAN class="n">args</SPAN><SPAN class="o">);</SPAN>
+	<SPAN class="o">}</SPAN>
+<SPAN class="o">}</SPAN></CODE></PRE></DIV>
+<P>At this point it is possible to start up the application and go to 
+<CODE>http://localhost:8080/jsondoc</CODE> to see the documentation (provided 
+that you wrote the documentation on your services and objects), ready to be used 
+with jsondoc-ui or with your custom documentation viewer.</P>
+<H4>Optional (but recomended): use jsondoc-ui-webjar to see the 
+documentation</H4>
+<P>Declare the dependency to the <CODE>jsondoc-ui-webjar</CODE> project:</P>
+<DIV class="highlight"><PRE><CODE class="language-xml" data-lang="xml"><SPAN class="nt">&lt;dependency&gt;</SPAN>
+        <SPAN class="nt">&lt;groupId&gt;</SPAN>org.jsondoc<SPAN class="nt">&lt;/groupId&gt;</SPAN>
+        <SPAN class="nt">&lt;artifactId&gt;</SPAN>jsondoc-ui-webjar<SPAN class="nt">&lt;/artifactId&gt;</SPAN>
+        <SPAN class="nt">&lt;version&gt;</SPAN>1.2.10<SPAN class="nt">&lt;/version&gt;</SPAN>
+<SPAN class="nt">&lt;/dependency&gt;</SPAN></CODE></PRE></DIV>
+<P>And now you can go to <CODE>http://localhost:8080/jsondoc-ui.html</CODE>, 
+insert <CODE>http://localhost:8080/jsondoc</CODE> in the box and get the 
+documentation.</P>
+<HR>
+
+<P>In case you are using <CODE>@EnableWebMvc</CODE> annotation, then you need to 
+also register resource handlers for static ui resources, in particular:</P>
+<DIV class="highlight"><PRE><CODE class="language-java" data-lang="java"><SPAN class="nd">@Configuration</SPAN>
+<SPAN class="kd">public</SPAN> <SPAN class="kd">class</SPAN> <SPAN class="nc">WebConfig</SPAN> <SPAN class="kd">extends</SPAN> <SPAN class="n">WebMvcConfigurationSupport</SPAN> <SPAN class="o">{</SPAN>
+        
+        <SPAN class="nd">@Override</SPAN>
+        <SPAN class="kd">protected</SPAN> <SPAN class="kt">void</SPAN> <SPAN class="nf">addResourceHandlers</SPAN><SPAN class="o">(</SPAN><SPAN class="n">ResourceHandlerRegistry</SPAN> <SPAN class="n">registry</SPAN><SPAN class="o">)</SPAN> <SPAN class="o">{</SPAN>
+                <SPAN class="n">registry</SPAN><SPAN class="o">.</SPAN><SPAN class="na">addResourceHandler</SPAN><SPAN class="o">(</SPAN><SPAN class="s">"**/*.css"</SPAN><SPAN class="o">,</SPAN> <SPAN class="s">"**/*.js"</SPAN><SPAN class="o">,</SPAN> <SPAN class="s">"**/*.map"</SPAN><SPAN class="o">,</SPAN> <SPAN class="s">"*.html"</SPAN><SPAN class="o">).</SPAN><SPAN class="na">addResourceLocations</SPAN><SPAN class="o">(</SPAN><SPAN class="s">"classpath:META-INF/resources/"</SPAN><SPAN class="o">).</SPAN><SPAN class="na">setCachePeriod</SPAN><SPAN class="o">(</SPAN><SPAN class="mi">0</SPAN><SPAN class="o">);</SPAN>
+        <SPAN class="o">}</SPAN>
+
+<SPAN class="o">}</SPAN></CODE></PRE></DIV>
+<SCRIPT type="text/javascript">
+	$('#howtospringboot').addClass('active');
+</SCRIPT>
+</DIV></DIV>
+<DIV class="row">
+<DIV class="col-md-12">
+<HR style="margin-top: 20px;" class="main">
+
+<P class="center">            Version 1.2.10 | Licensed under <A href="http://opensource.org/licenses/mit-license.html" 
+target="_blank">MIT License</A></P>
+<P class="center"><IFRAME height="20" src="readMe_files/view.htm" frameBorder="0" 
+width="90" allowTransparency="true" scrolling="0"></IFRAME><IFRAME height="20" 
+src="readMe_files/github-btn.htm" frameBorder="0" width="95" allowTransparency="true" 
+scrolling="0"></IFRAME></P>
+<P class="center"><A href="https://github.com/fabiomaffioletti/jsondoc" target="_blank">GitHub 
+Project</A> | <A href="https://github.com/fabiomaffioletti/jsondoc/issues" 
+target="_blank">Issues</A></P></DIV></DIV></DIV> 
+<!-- /container --></BODY></HTML>

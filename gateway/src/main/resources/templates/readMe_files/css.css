@@ -1,0 +1,12 @@
+@font-face {
+	font-family: Hammersmith One;
+	src: local("Hammersmith One"), local("HammersmithOne"), url(http://fonts.gstatic.com/s/hammersmithone/v7/FWNn6ITYqL6or7ZTmBxRhq3fkYX5z1QtDUdIWoaaD_k.woff) format("woff");
+	font-weight: 400;
+	font-style: normal;
+}
+@font-face {
+	font-family: Oswald;
+	src: local("Oswald Regular"), local("Oswald-Regular"), url(http://fonts.gstatic.com/s/oswald/v10/-g5pDUSRgvxvOl5u-a_WHw.woff) format("woff");
+	font-weight: 400;
+	font-style: normal;
+}

@@ -1,0 +1,21 @@
+subprojects {
+    buildscript {
+        repositories {
+//            maven { url "http://repo.spring.io/libs-snapshot" }
+//            maven { url "http://repo.spring.io/libs-milestone" }
+            mavenLocal()
+            mavenCentral()
+        }
+        dependencies {
+            classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
+        }
+    }
+    repositories {
+//        maven { url "http://repo.spring.io/libs-snapshot" }
+//        maven { url "http://repo.spring.io/libs-milestone" }
+        mavenLocal()
+        mavenCentral()
+    }
+
+
+}

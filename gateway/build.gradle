@@ -1,0 +1,141 @@
+def $BASE_NAME = 'esms-gateway'
+def $VERSION = '1.0'
+
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "spring-boot"
+apply plugin: "war"
+apply plugin: "eclipse-wtp"
+apply plugin: "application"
+
+configurations {
+    moreLibs
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+mainClassName = "Application"
+compileJava.options.encoding = 'UTF-8'
+
+startScripts {
+    defaultJvmOpts = ['-server', '-Xmx1024m', '-Xms1024m', '-Xmn512m']
+    classpath = project.files($BASE_NAME + '-' + $VERSION + '.jar')
+    doLast {
+        def windowsScriptFile = file getWindowsScript()
+        def unixScriptFile = file getUnixScript()
+        windowsScriptFile.text = windowsScriptFile.text.replace('%APP_HOME%\\lib\\' + $BASE_NAME + '-' + $VERSION + '.jar', '%APP_HOME%\\conf;%APP_HOME%\\lib\\' + $BASE_NAME + '-' + $VERSION + '.jar')
+        unixScriptFile.text = unixScriptFile.text.replace('$APP_HOME/lib/' + $BASE_NAME + '-' + $VERSION + '.jar', '$APP_HOME/conf:$APP_HOME/lib/' + $BASE_NAME + '-' + $VERSION + '.jar')
+    }
+}
+
+applicationDistribution.from("src/main/production/") {
+    into "conf"
+}
+
+compileJava {
+    options.encoding = "UTF-8"
+}
+
+war {
+    baseName = "ROOT"
+    version = ""
+    classpath("src/main/production")
+    //from 'src/rootContent' // adds a file-set to the root of the archive
+    //webInf { from 'src/additionalWebInf' } // adds a file-set to the WEB-INF dir.
+    //classpath fileTree('additionalLibs') // adds a file-set to the WEB-INF/lib dir.
+    //classpath configurations.moreLibs // adds a configuration to the WEB-INF/lib dir.
+    // webXml = file('src/someWeb.xml') // copies a file to WEB-INF/web.xml
+}
+//processResources {
+//    exclude "application.properties"
+//    exclude "cmpp1.properties"
+//    exclude "*.sql"
+//    exclude "jdbc.properties"
+//    exclude "logback.xml"
+//}
+
+dependencies {
+    //spring
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-jetty')
+    compile("org.springframework.boot:spring-boot-starter-data-jpa") {
+        exclude module: "hibernate-entitymanager"
+    }
+    compile 'org.hibernate:hibernate-entitymanager:4.2.16.Final'
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
+    // JSON DOC
+    compile("org.jsondoc:spring-boot-starter-jsondoc:1.2.10")
+    compile("org.jsondoc:jsondoc-ui-webjar:1.2.10")
+
+    //其他
+    compile "mysql:mysql-connector-java:5.1.29"
+    compile 'org.apache.commons:commons-lang3:3.3.2'
+    compile 'org.apache.poi:poi:3.11'
+    compile 'org.apache.poi:poi-ooxml:3.11'
+    compile 'org.apache.poi:poi-ooxml-schemas:3.11'
+    compile 'org.apache.poi:poi-scratchpad:3.11'
+    compile 'org.apache.poi:poi-excelant:3.11'
+    compile 'org.apache.poi:poi-examples:3.11'
+    compile 'xerces:xercesImpl:2.11.0'
+
+    testCompile(
+            "org.springframework.boot:spring-boot-starter-test",
+            "junit:junit"
+    )
+
+    //gateway
+    compile("org.springframework.boot:spring-boot-starter-redis")
+    compile 'commons-dbcp:commons-dbcp:1.4'
+    compile 'org.apache.mina:mina-core:2.0.7'
+
+    //apache http client
+    compile 'org.apache.httpcomponents:httpclient:4.5.1'
+    compile 'org.apache.httpcomponents:httpcore:4.4.4'
+}
+
+defaultTasks "copyResourceToStatic"
+
+task copyResourceToStatic {
+    copy {
+        from("src/main/resources/templates") {
+            exclude "**/*.html", "**/*.xml"
+        }
+        into "src/main/resources/static"
+        exclude "**/*.bak"
+
+        includeEmptyDirs = false
+    }
+}
+
+task copyDevOverlays(type: Copy) {
+    into("build/resources/main")
+    from("src/main/production") {
+        include "**/*"
+    }
+}
+
+war.doLast {
+    into("build/resources/main")
+    from("src/main/production") {
+        include "**/*"
+    }
+}
+
+jar {
+    baseName = $BASE_NAME
+    manifest.attributes provider: "www.xiaoujia.com"
+    version = $VERSION
+
+    manifest {
+        attributes(
+                'Main-Class': 'Application',
+                "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+        )
+    }
+}
