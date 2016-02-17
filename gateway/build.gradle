@@ -17,7 +17,7 @@ configurations {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-mainClassName = "Application"
+mainClassName = "com.breadenglish.Application"
 compileJava.options.encoding = 'UTF-8'
 
 startScripts {
@@ -129,12 +129,12 @@ war.doLast {
 
 jar {
     baseName = $BASE_NAME
-    manifest.attributes provider: "www.xiaoujia.com"
+    manifest.attributes provider: "www.ne81.com"
     version = $VERSION
 
     manifest {
         attributes(
-                'Main-Class': 'Application',
+                'Main-Class': 'com.breadenglish.Application',
                 "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
         )
     }

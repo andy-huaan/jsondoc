@@ -18,7 +18,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    //@Scheduled(cron = "0 20 0 * * ?")  //每天的20分准备数据
+    @Scheduled(cron = "0 20 0 * * ?")  //每天的20分准备数据
     @Transactional
     public void everyDay(){
         System.out.println("------测试day------");
@@ -31,7 +31,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    //@Scheduled(cron="0 50 * * * ?")  //每小时的50分数据录入
+    @Scheduled(cron="0 50 * * * ?")  //每小时的50分数据录入
     @Transactional
     public void ereryHour(){
         System.out.println("------测试hour------");
