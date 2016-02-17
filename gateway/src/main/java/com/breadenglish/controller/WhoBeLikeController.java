@@ -2,9 +2,11 @@ package com.breadenglish.controller;
 
 
 import com.breadenglish.model.WhoBeLike;
+import com.breadenglish.service.ScheduleService;
 import org.jsondoc.core.annotation.*;
 import org.jsondoc.core.pojo.ApiStage;
 import org.jsondoc.core.pojo.ApiVisibility;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -18,6 +20,9 @@ import java.util.HashMap;
 @RequestMapping(value = "/whobelikes")
 public class WhoBeLikeController {
     HashMap<Integer, WhoBeLike> data = new HashMap();
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     public WhoBeLikeController() {
         data.put(1, WhoBeLike.buildDetails(1, "强迫症的看过来!", "OCD - Obsessive Compulsive Disorder", new Date(), "http://m.breadenglish.com/Content/RwdImages/M/logo.png", "audioUrl", "fullSizeImage", "nextTitle", "backgoundMusic", "no"));
@@ -42,5 +47,15 @@ public class WhoBeLikeController {
                               @ApiQueryParam(name="pageSize",required = false,description = "每页Size")
                               @RequestParam(required = false, defaultValue = "0") int pageSize) {
         return data.values();
+    }
+
+    @RequestMapping(value = "/day")
+    public void day(){
+        scheduleService.everyDay();
+    }
+
+    @RequestMapping(value = "/hour")
+    public void hour(){
+        scheduleService.ereryHour();
     }
 }
