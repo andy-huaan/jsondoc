@@ -1,6 +1,3 @@
-def $BASE_NAME = 'esms-gateway'
-def $VERSION = '1.0'
-
 apply plugin: "java"
 apply plugin: "eclipse"
 apply plugin: "idea"
@@ -9,19 +6,14 @@ apply plugin: "war"
 apply plugin: "eclipse-wtp"
 apply plugin: "application"
 
-configurations {
-    moreLibs
-    compile.exclude module: "spring-boot-starter-tomcat"
-}
+def $BASE_NAME = 'doctoro2o-gateway'
+def $VERSION = '1.0'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-mainClassName = "com.breadenglish.Application"
 compileJava.options.encoding = 'UTF-8'
+mainClassName = "com.breadenglish.Application"
 
 startScripts {
-    defaultJvmOpts = ['-server', '-Xmx1024m', '-Xms1024m', '-Xmn512m']
+    defaultJvmOpts = ['-server', '-Xmx4096m', '-Xms4096m', '-Xmn1024m']
     classpath = project.files($BASE_NAME + '-' + $VERSION + '.jar')
     doLast {
         def windowsScriptFile = file getWindowsScript()
@@ -30,13 +22,16 @@ startScripts {
         unixScriptFile.text = unixScriptFile.text.replace('$APP_HOME/lib/' + $BASE_NAME + '-' + $VERSION + '.jar', '$APP_HOME/conf:$APP_HOME/lib/' + $BASE_NAME + '-' + $VERSION + '.jar')
     }
 }
-
 applicationDistribution.from("src/main/production/") {
     into "conf"
 }
-
 compileJava {
     options.encoding = "UTF-8"
+}
+
+configurations {
+    moreLibs
+//    compile.exclude module: "spring-boot-starter-tomcat"
 }
 
 war {
@@ -60,29 +55,28 @@ war {
 dependencies {
     //spring
     compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-jetty')
-    compile("org.springframework.boot:spring-boot-starter-data-jpa") {
-        exclude module: "hibernate-entitymanager"
-    }
-    compile 'org.hibernate:hibernate-entitymanager:4.2.16.Final'
+//    compile('org.springframework.boot:spring-boot-starter-jetty')
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-actuator")
 
-    // JSON DOC
-    compile("org.jsondoc:spring-boot-starter-jsondoc:1.2.10")
-    compile("org.jsondoc:jsondoc-ui-webjar:1.2.10")
-
     //其他
     compile "mysql:mysql-connector-java:5.1.29"
     compile 'org.apache.commons:commons-lang3:3.3.2'
-    compile 'org.apache.poi:poi:3.11'
-    compile 'org.apache.poi:poi-ooxml:3.11'
-    compile 'org.apache.poi:poi-ooxml-schemas:3.11'
-    compile 'org.apache.poi:poi-scratchpad:3.11'
-    compile 'org.apache.poi:poi-excelant:3.11'
-    compile 'org.apache.poi:poi-examples:3.11'
-    compile 'xerces:xercesImpl:2.11.0'
+//    compile 'org.apache.poi:poi:3.11'
+//    compile 'org.apache.poi:poi-ooxml:3.11'
+//    compile 'org.apache.poi:poi-ooxml-schemas:3.11'
+//    compile 'org.apache.poi:poi-scratchpad:3.11'
+//    compile 'org.apache.poi:poi-excelant:3.11'
+//    compile 'org.apache.poi:poi-examples:3.11'
+//    compile 'xerces:xercesImpl:2.11.0'
+    compile 'com.github.kevinsawicki:http-request:6.0'
+    compile 'org.jasypt:jasypt-spring31:1.9.2'
+//    compile 'xml-apis:xml-apis:1.4.01'
+//    compile 'xerces:xmlParserAPIs:2.6.2'
+//    compile 'xerces:xerces:2.4.0'
+    compile 'joda-time:joda-time:2.8.2'
 
     testCompile(
             "org.springframework.boot:spring-boot-starter-test",
@@ -93,10 +87,11 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-redis")
     compile 'commons-dbcp:commons-dbcp:1.4'
     compile 'org.apache.mina:mina-core:2.0.7'
+    compile 'commons-httpclient:commons-httpclient:3.1'
 
-    //apache http client
-    compile 'org.apache.httpcomponents:httpclient:4.5.1'
-    compile 'org.apache.httpcomponents:httpcore:4.4.4'
+    // JSON DOC
+    compile("org.jsondoc:spring-boot-starter-jsondoc:1.2.10")
+    compile("org.jsondoc:jsondoc-ui-webjar:1.2.10")
 }
 
 defaultTasks "copyResourceToStatic"
@@ -129,13 +124,41 @@ war.doLast {
 
 jar {
     baseName = $BASE_NAME
-    manifest.attributes provider: "www.ne81.com"
+    manifest.attributes provider: ""
     version = $VERSION
 
     manifest {
         attributes(
-                'Main-Class': 'com.breadenglish.Application',
+                'Main-Class': "com.breadenglish.Application",
                 "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
         )
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+
+configurations {
+    jaxDoclet
+}
+
+javadoc {
+    options {
+        locale = 'en_US'
+        encoding = 'UTF-8'
+        docFilesSubDirs = true
+        excludeDocFilesSubDir '.svn'
+        options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PRIVATE
+    }
+}
+
+task generateRestApiDocs(type: Javadoc) {
+    options.encoding = "UTF-8"
+    source = sourceSets.main.allJava
+    destinationDir = reporting.file("rest-api-docs")
+    options.docletpath = configurations.jaxDoclet.files.asType(List)
+    options.doclet = "com.lunatech.doclets.jax.jaxrs.JAXRSDoclet"
+    options.addStringOption("jaxrscontext", "http://localhost:8080/myapp")
 }
